@@ -42,7 +42,7 @@ let calculator = Calculator()
 
 calculator.num1 = 110 // 첫번째 수
 calculator.operation = "/" // 연산자
-calculator.num2 = 0 // 두번째 수
+calculator.num2 = 2 // 두번째 수
 
 let result = calculator
 print(result)
