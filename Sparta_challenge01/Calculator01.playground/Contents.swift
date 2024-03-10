@@ -1,7 +1,5 @@
-// MARK: 계산기 만들기
-
-
-// Lv.1
+/*:
+# 계산기 만들기 [Lv.1] */
 
 class Calculator {
     var a:Int = 0
@@ -39,3 +37,4 @@ calculator.operation = "/"
 
 let result = calculator.calculate(a: 10, b: 2, op: "/")
 print(result)
+
