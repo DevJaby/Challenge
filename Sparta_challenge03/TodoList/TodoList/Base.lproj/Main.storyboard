@@ -24,7 +24,7 @@
                                 </constraints>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8AQ-1p-6ih">
-                                <rect key="frame" x="163.66666666666666" y="719" width="66" height="51"/>
+                                <rect key="frame" x="163.66666666666666" y="747" width="66" height="51"/>
                                 <color key="tintColor" red="0.97967308760000005" green="0.32466363910000001" blue="0.092759154740000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <buttonConfiguration key="configuration" style="filled" cornerStyle="large" buttonSize="large"/>
                                 <connections>
@@ -37,7 +37,7 @@
                         <constraints>
                             <constraint firstItem="hAr-2O-QGG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="FE2-KF-hVo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hAr-2O-QGG" secondAttribute="trailing" constant="16" id="KEk-L0-2D6"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8AQ-1p-6ih" secondAttribute="bottom" constant="48" id="UZI-Qt-yTV"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8AQ-1p-6ih" secondAttribute="bottom" constant="20" id="UZI-Qt-yTV"/>
                             <constraint firstItem="8AQ-1p-6ih" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="c4a-09-CeU"/>
                             <constraint firstItem="hAr-2O-QGG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="fGd-Oc-6LN"/>
                             <constraint firstItem="hAr-2O-QGG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="viN-yf-irI"/>
