@@ -45,22 +45,41 @@ class ViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TodoCell")
         tableView.delegate = self
         tableView.dataSource = self
-        
-        // 저장된 데이터 불러오기 메서드 호출
-        loadTodos()
-        
         // 드래그 앤 드롭 기능 활성화
         tableView.dragInteractionEnabled = true
         tableView.dragDelegate = self
         tableView.dropDelegate = self
+        // 저장된 데이터 불러오기 메서드 호출
+        loadTodos()
+
     }
     
     // MARK: - UI 관련
-    
+   
+    // 할일 리스트
     @IBOutlet weak var tableView: UITableView!
     
-    // MARK: - 추가 및 편집 관련 UIAlertController
+    // 다크모드 토글 추가
+    @IBOutlet weak var darkModeSwitchButton: UIButton!
+    @IBAction func toggleDarkMode(_ sender: Any) {
+       
+        if #available(iOS 13.0, *) {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    if let window = windowScene.windows.first {
+                        // 현재 다크 모드 상태 확인
+                        let isDarkMode = window.overrideUserInterfaceStyle == .dark
+                        
+                        // Dark Mode 상태에 따라 이미지 업데이트
+                        darkModeSwitchButton.setImage(isDarkMode ? UIImage(named: "LightModeOn") : UIImage(named: "DarkModeOn"), for: .normal)
+                        
+                        // Dark Mode 상태 토글
+                        window.overrideUserInterfaceStyle = isDarkMode ? .light : .dark
+                    }
+                }
+            }
+        }
     
+    // 할일 추가
     @IBAction func addTodo(_ sender: Any) {
         let alert = UIAlertController(title: "새로운 할 일", message: "내용을 입력하세요.", preferredStyle: .alert)
         alert.addTextField { (textField) in
@@ -95,7 +114,7 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) 
         let todo = todos[indexPath.row]
         cell.textLabel?.text = todo.title
         
@@ -108,10 +127,10 @@ extension ViewController: UITableViewDataSource {
         // 토글 버튼의 색상 설정
         toggleButton.onTintColor =  UIColor(red: 0.98, green: 0.325, blue: 0.09, alpha: 1) // 켜진 상태일 때의 색상
         toggleButton.tintColor = .gray // 꺼진 상태일 때의 색상
-        
+
         return cell
     }
-    
+
     @objc func toggleButtonChanged(_ sender: UISwitch) {
         guard let cell = sender.superview as? UITableViewCell,
               let indexPath = tableView.indexPath(for: cell) else {

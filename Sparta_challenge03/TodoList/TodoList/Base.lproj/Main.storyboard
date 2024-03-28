@@ -17,10 +17,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hAr-2O-QGG">
-                                <rect key="frame" x="16" y="75" width="361" height="500"/>
+                                <rect key="frame" x="20" y="119" width="353" height="600"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="500" id="7Bc-Zp-Kcy"/>
+                                    <constraint firstAttribute="height" constant="600" id="7Bc-Zp-Kcy"/>
                                 </constraints>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8AQ-1p-6ih">
@@ -31,19 +31,30 @@
                                     <action selector="addTodo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="a1F-2f-CKP"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W6f-u1-nF4">
+                                <rect key="frame" x="163" y="59" width="67" height="52"/>
+                                <buttonConfiguration key="configuration" style="plain" image="LightModeOn"/>
+                                <connections>
+                                    <action selector="toggleDarkMode:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vad-HS-yRh"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="hAr-2O-QGG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="FE2-KF-hVo"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hAr-2O-QGG" secondAttribute="trailing" constant="16" id="KEk-L0-2D6"/>
+                            <constraint firstItem="hAr-2O-QGG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="FE2-KF-hVo"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hAr-2O-QGG" secondAttribute="trailing" constant="20" id="KEk-L0-2D6"/>
+                            <constraint firstItem="W6f-u1-nF4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="PK2-kf-EMe"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8AQ-1p-6ih" secondAttribute="bottom" constant="20" id="UZI-Qt-yTV"/>
+                            <constraint firstItem="W6f-u1-nF4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="beg-km-QiB"/>
                             <constraint firstItem="8AQ-1p-6ih" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="c4a-09-CeU"/>
-                            <constraint firstItem="hAr-2O-QGG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="fGd-Oc-6LN"/>
+                            <constraint firstItem="hAr-2O-QGG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="60" id="fGd-Oc-6LN"/>
+                            <constraint firstItem="hAr-2O-QGG" firstAttribute="top" secondItem="W6f-u1-nF4" secondAttribute="bottom" constant="8" id="pOY-fr-T8D"/>
                             <constraint firstItem="hAr-2O-QGG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="viN-yf-irI"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="darkModeSwitchButton" destination="W6f-u1-nF4" id="h3N-Ca-4Zp"/>
                         <outlet property="tableView" destination="hAr-2O-QGG" id="lsB-U5-wnw"/>
                     </connections>
                 </viewController>
@@ -53,6 +64,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="LightModeOn" width="43" height="43"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
