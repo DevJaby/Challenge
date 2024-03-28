@@ -51,33 +51,37 @@ class ViewController: UIViewController {
         tableView.dropDelegate = self
         // 저장된 데이터 불러오기 메서드 호출
         loadTodos()
-
+        
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        let initialImageName = isDarkMode ? "DarkModeOn" : "LightModeOn"
+        darkModeSwitchButton.setImage(UIImage(named: initialImageName), for: .normal)
     }
     
     // MARK: - UI 관련
-   
+    
     // 할일 리스트
     @IBOutlet weak var tableView: UITableView!
     
     // 다크모드 토글 추가
     @IBOutlet weak var darkModeSwitchButton: UIButton!
     @IBAction func toggleDarkMode(_ sender: Any) {
-       
+        
         if #available(iOS 13.0, *) {
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                    if let window = windowScene.windows.first {
-                        // 현재 다크 모드 상태 확인
-                        let isDarkMode = window.overrideUserInterfaceStyle == .dark
-                        
-                        // Dark Mode 상태에 따라 이미지 업데이트
-                        darkModeSwitchButton.setImage(isDarkMode ? UIImage(named: "LightModeOn") : UIImage(named: "DarkModeOn"), for: .normal)
-                        
-                        // Dark Mode 상태 토글
-                        window.overrideUserInterfaceStyle = isDarkMode ? .light : .dark
-                    }
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    // 초기화면 다크 모드 상태
+                    let isDarkMode = window.overrideUserInterfaceStyle == .dark
+                    
+                    // Dark Mode 상태에 따라 이미지 업데이트
+                    let imageName = isDarkMode ? "LightModeOn" : "DarkModeOn"
+                    darkModeSwitchButton.setImage(UIImage(named: imageName), for: .normal)
+                    
+                    // Dark Mode 상태 토글
+                    window.overrideUserInterfaceStyle = isDarkMode ? .light : .dark
                 }
             }
         }
+    }
     
     // 할일 추가
     @IBAction func addTodo(_ sender: Any) {
@@ -114,7 +118,7 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) 
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
         let todo = todos[indexPath.row]
         cell.textLabel?.text = todo.title
         
@@ -127,10 +131,10 @@ extension ViewController: UITableViewDataSource {
         // 토글 버튼의 색상 설정
         toggleButton.onTintColor =  UIColor(red: 0.98, green: 0.325, blue: 0.09, alpha: 1) // 켜진 상태일 때의 색상
         toggleButton.tintColor = .gray // 꺼진 상태일 때의 색상
-
+        
         return cell
     }
-
+    
     @objc func toggleButtonChanged(_ sender: UISwitch) {
         guard let cell = sender.superview as? UITableViewCell,
               let indexPath = tableView.indexPath(for: cell) else {
@@ -145,30 +149,62 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
     
-    //스와이프 삭제 기능
+    // 셀 편집 모드 시작
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        editTodo(at: indexPath)
+    }
+    
+    // 스와이프 삭제 기능
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completionHandler in
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completionHandler in
             self?.todos.remove(at: indexPath.row)
             self?.saveTodos() // 삭제 후 저장
             tableView.deleteRows(at: [indexPath], with: .automatic)
             completionHandler(true)
         }
+        deleteAction.image = UIImage(systemName: "trash.fill") // 삭제 아이콘 설정
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
     
     // 드래그 앤 드롭 기능 활성화
-        func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-            return true
-        }
-
-        // 셀 이동 시작
-        func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-            let movedTodo = todos.remove(at: sourceIndexPath.row)
-            todos.insert(movedTodo, at: destinationIndexPath.row)
-            saveTodos() // 이동 후 저장
-        }
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
+    // 셀 이동 시작
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedTodo = todos.remove(at: sourceIndexPath.row)
+        todos.insert(movedTodo, at: destinationIndexPath.row)
+        saveTodos() // 이동 후 저장
+    }
+    
+    // 셀 편집 기능
+    private func editTodo(at indexPath: IndexPath) {
+        let todo = todos[indexPath.row]
+        
+        let alert = UIAlertController(title: "할 일 수정", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.text = todo.title
+        }
+        
+        let saveAction = UIAlertAction(title: "저장", style: .default) { [weak self] _ in
+            guard let textField = alert.textFields?.first, let newText = textField.text, !newText.isEmpty else { return }
+            
+            self?.todos[indexPath.row].title = newText
+            self?.saveTodos()
+            self?.tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
+    }
 }
+
 
 // MARK: - 테이블 뷰 드래그 앤 드롭 프로토콜
 

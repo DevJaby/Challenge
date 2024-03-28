@@ -15,11 +15,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="todo_logo" translatesAutoresizingMaskIntoConstraints="NO" id="S6c-de-4Er">
-                                <rect key="frame" x="96.666666666666686" y="326" width="200" height="200"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Just Do" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FMN-Ka-c5U">
-                                <rect key="frame" x="79.666666666666686" y="315" width="234" height="74"/>
+                                <rect key="frame" x="79.666666666666686" y="389" width="234" height="74"/>
                                 <fontDescription key="fontDescription" type="system" weight="black" pointSize="62"/>
                                 <color key="textColor" red="0.078018707482993194" green="0.078018707482993194" blue="0.078018707482993194" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -28,11 +25,8 @@
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="FMN-Ka-c5U" secondAttribute="bottom" constant="429" id="1iF-U9-sZ7"/>
-                            <constraint firstItem="FMN-Ka-c5U" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="2fC-pd-boW"/>
-                            <constraint firstItem="S6c-de-4Er" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="3qC-pf-ksc"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="S6c-de-4Er" secondAttribute="bottom" constant="292" id="bH0-ew-Zxb"/>
-                            <constraint firstItem="S6c-de-4Er" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="cqy-nj-oEv"/>
+                            <constraint firstItem="FMN-Ka-c5U" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="9HR-XP-OMa"/>
+                            <constraint firstItem="FMN-Ka-c5U" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="IGk-EL-adW"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -41,7 +35,4 @@
             <point key="canvasLocation" x="52.671755725190835" y="374.64788732394368"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="todo_logo" width="200" height="200"/>
-    </resources>
 </document>
