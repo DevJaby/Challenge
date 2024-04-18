@@ -84,7 +84,7 @@ class WishListViewController: UITableViewController {
     }
     
     // 장바구니 비우기 기능
-    @objc func clearCart() {
+    @IBAction func clearCart(_ sender: Any) {
         if let context = persistentContainer?.viewContext {
             for product in productList {
                 context.delete(product)

@@ -41,7 +41,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     @IBOutlet weak var scrollView: UIScrollView! // 스크롤 뷰 추가
-    @IBOutlet weak var contentView: UIView! // 기존의 레이아웃을 포함하는 컨텐트 뷰
+//    @IBOutlet weak var contentView: UIView! // 기존의 레이아웃을 포함하는 컨텐트 뷰
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -130,4 +130,4 @@ class ViewController: UIViewController, UIScrollViewDelegate {
              refreshData()
          }
      }
- }  
+ }
