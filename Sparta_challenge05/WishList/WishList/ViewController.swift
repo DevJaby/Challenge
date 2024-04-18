@@ -10,23 +10,26 @@ import CoreData
 
 class ViewController: UIViewController, UIScrollViewDelegate {
     
+    // MARK: -Properties
+    
+    // 새로고침을 위한 UIRefreshControl
     private let refreshControl = UIRefreshControl()
+    private var isLoading = false
+    
     // Core Data를 사용하기 위한 Persistent Container
     var persistentContainer: NSPersistentContainer? {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     
-    // 현재 상품 정보
+    // 현재 상품 정보를 저장하는 변수
     private var currentProduct: RemoteProduct? = nil {
         didSet {
-            DispatchQueue.main.async {
-                self.imageView.image = nil
-                self.titleLabel.text = self.currentProduct?.title
-                self.descriptionLabel.text = self.currentProduct?.description
-                if let price = self.currentProduct?.price {
-                    // 가격을 1000단위로 콤마(,) 처리하여 표시
-                    let formattedPrice = self.formatPrice(Int(price))
-                    self.priceLabel.text = "\(formattedPrice) $"
+            DispatchQueue.main.async { [weak self] in
+                self?.imageView.image = nil
+                self?.titleLabel.text = self?.currentProduct?.title
+                self?.descriptionLabel.text = self?.currentProduct?.description
+                if let price = self?.currentProduct?.price {
+                    self?.priceLabel.text = price.formatPrice() + " $"
                 }
             }
             
@@ -40,29 +43,39 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             }
         }
     }
-    @IBOutlet weak var scrollView: UIScrollView! // 스크롤 뷰 추가
-//    @IBOutlet weak var contentView: UIView! // 기존의 레이아웃을 포함하는 컨텐트 뷰
     
+    // MARK: -IBOutlets
+    
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
-    
-    // 상품 저장 버튼 액션
+
+    // MARK: -UI Actions
+
+    // 상품 저장 버튼
     @IBAction func tappedSaveProductButton(_ sender: UIButton) {
         self.saveWishProduct()
     }
-    // 다음 상품 보기 버튼 액션
+    
+    // 다음 상품 보기 버튼
     @IBAction func tappedSkipButton(_ sender: UIButton) {
         self.fetchRemoteProduct()
     }
-    // 위시 리스트 보기 버튼 액션
+    
+    // 위시 리스트 보기 버튼
     @IBAction func tappedPresentWishList(_ sender: UIButton) {
         guard let nextVC = self.storyboard?.instantiateViewController(identifier: "WishListViewController") as? WishListViewController else { return }
         self.present(nextVC, animated: true)
     }
-    // 상품 정보 가져오기 메서드
+    
+    // MARK: -Networking
+    
+    // 랜덤 상품 정보 가져오기
     private func fetchRemoteProduct() {
+        isLoading = true
+        
         let productID = Int.random(in: 1...100)
         
         if let url = URL(string: "https://dummyjson.com/products/\(productID)") {
@@ -77,13 +90,20 @@ class ViewController: UIViewController, UIScrollViewDelegate {
                         print("Decode Error: \(error)")
                     }
                 }
+                
+                self?.isLoading = false
+                DispatchQueue.main.async {
+                    self?.refreshControl.endRefreshing()
+                }
             }
             
             task.resume()
         }
     }
     
-    // 위시 리스트에 상품 저장 메서드
+    // MARK: -Core Data
+    
+    // 현재 상품을 위시 리스트에 저장
     private func saveWishProduct() {
         guard let context = persistentContainer?.viewContext,
               let currentProduct = self.currentProduct else { return }
@@ -91,43 +111,40 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         let wishProduct = Product(context: context)
         wishProduct.id = Int64(currentProduct.id)
         wishProduct.title = currentProduct.title
-        wishProduct.price = Double(currentProduct.price)
+        wishProduct.price = currentProduct.price
         
         try? context.save()
     }
     
-    // 가격을 1000단위로 콤마(,) 처리하는 함수
-    private func formatPrice(_ price: Int) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter.string(from: NSNumber(value: price)) ?? ""
-    }
+    // MARK: -View Life Cycle
     
     override func viewDidLoad() {
-         super.viewDidLoad()
-         self.fetchRemoteProduct()
-         // 스크롤 뷰에 refreshControl 추가
-         scrollView.delegate = self
-         scrollView.refreshControl = self.refreshControl
-         self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-         // 당겨서 새로고침 문구 설정
-         refreshControl.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
-     }
-      
-     @objc private func refreshData() {
-         // 새로고침이 시작되었을 때 실행되는 코드
-         fetchRemoteProduct()
-         // 새로고침을 완료했을 때 refreshControl을 중지시킴
-         refreshControl.endRefreshing()
-     }
-     
-     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-         // 스크롤이 멈추고 사용자가 당긴 정도를 확인
-         let offsetY = scrollView.contentOffset.y
-         let contentHeight = scrollView.contentSize.height
-         if offsetY > contentHeight - scrollView.frame.size.height {
-             // 스크롤이 내려진 정도가 컨텐츠의 끝에 도달했을 때 새로고침 실행
-             refreshData()
-         }
-     }
- }
+        super.viewDidLoad()
+        // 초기 상품 정보 가져오기
+        self.fetchRemoteProduct()
+        
+        // 스크롤 뷰에 refreshControl 추가
+        scrollView.delegate = self
+        scrollView.refreshControl = self.refreshControl
+        self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        refreshControl.attributedTitle = NSAttributedString(string: "계속 당겨서 다른 상품 보기")
+    }
+    
+    // MARK: -Helper Methods
+    
+    // 새로고침
+    @objc private func refreshData() {
+        if !isLoading {
+            fetchRemoteProduct()
+        } else {
+            refreshControl.endRefreshing()
+        }
+    }
+    
+    // 스크롤 종료 시 새로고침 여부 확인
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate && !refreshControl.isRefreshing {
+            refreshData()
+        }
+    }
+}

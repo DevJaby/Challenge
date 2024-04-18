@@ -17,7 +17,7 @@ class WishListViewController: UITableViewController {
     
     // 위시 리스트에 담긴 상품 목록
     private var productList: [Product] = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,17 +28,32 @@ class WishListViewController: UITableViewController {
         // 위시 리스트 불러오기
         setProductList()
         
-        // 네비게이션 바의 오른쪽에 장바구니 비우기 버튼 추가
-          let clearCartButton = UIBarButtonItem(title: "장바구니 비우기", style: .plain, target: self, action: #selector(clearCart))
-          navigationItem.rightBarButtonItem = clearCartButton
-      }
-
+        // 버튼을 포함할 뷰 생성
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+        
+        // 버튼 생성
+        let clearWishlistButton = UIButton(type: .system)
+        clearWishlistButton.setTitle("위시리스트 비우기", for: .normal)
+        clearWishlistButton.addTarget(self, action: #selector(clearWishlist), for: .touchUpInside)
+        
+        // 버튼을 뷰에 추가
+        headerView.addSubview(clearWishlistButton)
+        
+        // 버튼의 레이아웃 설정
+        clearWishlistButton.translatesAutoresizingMaskIntoConstraints = false
+        clearWishlistButton.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+        clearWishlistButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        
+        // 테이블 뷰의 헤더 뷰로 설정
+        tableView.tableHeaderView = headerView
+    }
+    
     // Core Data에서 위시 리스트 불러오기
     private func setProductList() {
         guard let context = self.persistentContainer?.viewContext else { return }
-    
+        
         let request = Product.fetchRequest()
-    
+        
         if let productList = try? context.fetch(request) {
             self.productList = productList
         }
@@ -59,7 +74,7 @@ class WishListViewController: UITableViewController {
         let title = product.title ?? ""
         let price = product.price
         
-        cell.textLabel?.text = "[\(id)] \(title) - \(price)$"
+        cell.textLabel?.text = "[\(id)] \(title) - \(price.formatPrice()) $"
         return cell
     }
     
@@ -83,8 +98,8 @@ class WishListViewController: UITableViewController {
         return configuration
     }
     
-    // 장바구니 비우기 기능
-    @IBAction func clearCart(_ sender: Any) {
+    // 위시리스트 비우기 액션
+    @objc private func clearWishlist() {
         if let context = persistentContainer?.viewContext {
             for product in productList {
                 context.delete(product)

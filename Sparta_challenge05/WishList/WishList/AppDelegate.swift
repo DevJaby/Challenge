@@ -45,3 +45,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
+
+    // MARK: - 가격 표기
+extension Double {
+    func formatPrice() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter.string(from: NSNumber(value: self)) ?? ""
+    }
+}
