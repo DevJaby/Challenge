@@ -110,25 +110,16 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="skD-I6-f66" secondAttribute="bottom" constant="272" id="12u-yy-c1T"/>
-                                    <constraint firstAttribute="trailing" secondItem="skD-I6-f66" secondAttribute="trailing" id="1Q1-BH-cBI"/>
                                     <constraint firstItem="0S5-TB-Ake" firstAttribute="leading" secondItem="7d7-IW-TLV" secondAttribute="leading" constant="8" id="3Xy-gs-VVD"/>
                                     <constraint firstItem="inz-k0-Lzr" firstAttribute="trailing" secondItem="0S5-TB-Ake" secondAttribute="trailing" constant="8" id="5pE-mp-KxI"/>
-                                    <constraint firstItem="0S5-TB-Ake" firstAttribute="top" secondItem="skD-I6-f66" secondAttribute="bottom" constant="8" symbolic="YES" id="Aah-ic-NtE"/>
-                                    <constraint firstAttribute="trailing" secondItem="skD-I6-f66" secondAttribute="trailing" id="GjK-3B-OAq"/>
                                     <constraint firstItem="skD-I6-f66" firstAttribute="leading" secondItem="7d7-IW-TLV" secondAttribute="leading" id="JL6-dx-pS9"/>
                                     <constraint firstItem="skD-I6-f66" firstAttribute="top" secondItem="7d7-IW-TLV" secondAttribute="top" id="OCA-BH-kCm"/>
                                     <constraint firstItem="0S5-TB-Ake" firstAttribute="top" secondItem="skD-I6-f66" secondAttribute="bottom" constant="8" id="P2Q-rq-Rqy"/>
                                     <constraint firstItem="skD-I6-f66" firstAttribute="top" secondItem="GGy-Jy-x58" secondAttribute="top" id="S3v-fA-93z"/>
                                     <constraint firstItem="0S5-TB-Ake" firstAttribute="top" secondItem="skD-I6-f66" secondAttribute="bottom" constant="8" id="ao1-qW-zlQ"/>
-                                    <constraint firstItem="0S5-TB-Ake" firstAttribute="leading" secondItem="7d7-IW-TLV" secondAttribute="leadingMargin" id="bVb-W5-Z2H"/>
                                     <constraint firstAttribute="trailing" secondItem="0S5-TB-Ake" secondAttribute="trailing" constant="8" id="cr5-n3-kab"/>
-                                    <constraint firstItem="skD-I6-f66" firstAttribute="top" secondItem="inz-k0-Lzr" secondAttribute="top" id="eXO-gj-CkZ"/>
                                     <constraint firstItem="0S5-TB-Ake" firstAttribute="leading" secondItem="inz-k0-Lzr" secondAttribute="leading" constant="8" id="nqy-z7-AVi"/>
-                                    <constraint firstItem="skD-I6-f66" firstAttribute="leading" secondItem="7d7-IW-TLV" secondAttribute="leading" id="qaR-78-fSb"/>
-                                    <constraint firstAttribute="trailing" secondItem="skD-I6-f66" secondAttribute="trailing" id="sXQ-Af-VTc"/>
                                     <constraint firstItem="skD-I6-f66" firstAttribute="centerX" secondItem="7d7-IW-TLV" secondAttribute="centerX" id="tNn-yq-dZj"/>
-                                    <constraint firstItem="skD-I6-f66" firstAttribute="top" secondItem="inz-k0-Lzr" secondAttribute="top" id="xSr-XK-bfp"/>
-                                    <constraint firstItem="skD-I6-f66" firstAttribute="leading" secondItem="7d7-IW-TLV" secondAttribute="leading" id="zd9-8y-fEa"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="GGy-Jy-x58"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="inz-k0-Lzr"/>
