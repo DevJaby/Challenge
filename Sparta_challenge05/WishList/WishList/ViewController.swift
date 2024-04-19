@@ -130,7 +130,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         refreshControl.attributedTitle = NSAttributedString(string: "계속 당겨서 다른 상품 보기")
     }
     
-    // MARK: -Helper Methods
+    // MARK: -Methods
     
     // 새로고침
     @objc private func refreshData() {

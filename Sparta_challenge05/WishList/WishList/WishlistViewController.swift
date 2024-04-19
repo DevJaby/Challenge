@@ -10,45 +10,35 @@ import CoreData
 
 class WishListViewController: UITableViewController {
     
+    // MARK: - Properties
+    
     // Core Data를 사용하기 위한 Persistent Container
     var persistentContainer: NSPersistentContainer? {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     
-    // 위시 리스트에 담긴 상품 목록
+    // 현재 위시 리스트에 있는 상품 목록을 저장하는 배열
     private var productList: [Product] = []
+    
+    // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // TableView에 Cell 등록
+        // TableView에 셀 등록
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.dataSource = self
         
-        // 위시 리스트 불러오기
+        // 위시 리스트 상품 목록 설정
         setProductList()
         
-        // 버튼을 포함할 뷰 생성
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
-        
-        // 버튼 생성
-        let clearWishlistButton = UIButton(type: .system)
-        clearWishlistButton.setTitle("위시리스트 비우기", for: .normal)
-        clearWishlistButton.addTarget(self, action: #selector(clearWishlist), for: .touchUpInside)
-        
-        // 버튼을 뷰에 추가
-        headerView.addSubview(clearWishlistButton)
-        
-        // 버튼의 레이아웃 설정
-        clearWishlistButton.translatesAutoresizingMaskIntoConstraints = false
-        clearWishlistButton.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-        clearWishlistButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        
-        // 테이블 뷰의 헤더 뷰로 설정
-        tableView.tableHeaderView = headerView
+        // TableView의 Footer View 설정
+        configureFooterView()
     }
     
-    // Core Data에서 위시 리스트 불러오기
+    // MARK: - Data Methods
+    
+    // Core Data에서 위시 리스트 상품 목록을 가져와 배열에 저장
     private func setProductList() {
         guard let context = self.persistentContainer?.viewContext else { return }
         
@@ -59,12 +49,12 @@ class WishListViewController: UITableViewController {
         }
     }
     
-    // TableView 데이터 소스 - 행 수 반환
+    // MARK: - TableView DataSource Methods
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.productList.count
     }
     
-    // TableView 데이터 소스 - 셀 설정
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
@@ -74,20 +64,25 @@ class WishListViewController: UITableViewController {
         let title = product.title ?? ""
         let price = product.price
         
+        // 셀 텍스트 설정
+        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         cell.textLabel?.text = "[\(id)] \(title) - \(price.formatPrice()) $"
+        
         return cell
     }
     
-    // Swipe to delete 기능 구현
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // 셀의 높이 설정
+        return 60 // 원하는 높이로 설정
+    }
+    
+    // MARK: - TableView Actions
+    
+    // 셀의 스와이프 액션
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
-            let productToRemove = self.productList.remove(at: indexPath.row)
-            if let context = self.persistentContainer?.viewContext {
-                context.delete(productToRemove)
-                try? context.save()
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
+            self.deleteProduct(at: indexPath)
             completionHandler(true)
         }
         deleteAction.image = UIImage(systemName: "trash.fill")
@@ -98,7 +93,7 @@ class WishListViewController: UITableViewController {
         return configuration
     }
     
-    // 위시리스트 비우기 액션
+    // 위시 리스트 비우기 버튼을 눌렀을 때의 동작
     @objc private func clearWishlist() {
         if let context = persistentContainer?.viewContext {
             for product in productList {
@@ -108,5 +103,32 @@ class WishListViewController: UITableViewController {
             try? context.save()
             tableView.reloadData()
         }
+    }
+    
+    // TableView의 푸터 뷰 설정: 위시 리스트 비우기
+    private func configureFooterView() {
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+        
+        let clearWishlistButton = UIButton(type: .system)
+        clearWishlistButton.setTitle("위시 리스트 비우기", for: .normal)
+        clearWishlistButton.addTarget(self, action: #selector(clearWishlist), for: .touchUpInside)
+        clearWishlistButton.setTitleColor(.systemRed, for: .normal)
+        
+        footerView.addSubview(clearWishlistButton)
+        
+        clearWishlistButton.translatesAutoresizingMaskIntoConstraints = false
+        clearWishlistButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor).isActive = true
+        clearWishlistButton.centerYAnchor.constraint(equalTo: footerView.centerYAnchor).isActive = true
+        
+        tableView.tableFooterView = footerView
+    }
+    
+    // 상품 삭제 메서드
+    private func deleteProduct(at indexPath: IndexPath) {
+        guard let context = persistentContainer?.viewContext else { return }
+        let productToRemove = self.productList.remove(at: indexPath.row)
+        context.delete(productToRemove)
+        try? context.save()
+        tableView.deleteRows(at: [indexPath], with: .fade)
     }
 }

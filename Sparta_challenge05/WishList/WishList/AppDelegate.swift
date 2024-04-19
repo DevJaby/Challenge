@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-    // MARK: - 가격 표기
+// 가격 표기 포멧팅
 extension Double {
     func formatPrice() -> String {
         let formatter = NumberFormatter()
