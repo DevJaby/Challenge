@@ -33,13 +33,31 @@ class ViewController: UIViewController, UIScrollViewDelegate {
                 }
             }
             
-            DispatchQueue.global().async { [weak self] in
-                guard let currentProduct = self?.currentProduct,
-                      let data = try? Data(contentsOf: currentProduct.thumbnail),
-                      let image = UIImage(data: data) else { return }
-                DispatchQueue.main.async {
-                    self?.imageView.image = image
+            if let thumbnailURL = currentProduct?.thumbnail {
+                // 이미지 다운로드
+                let task = URLSession.shared.dataTask(with: thumbnailURL) { [weak self] (data, response, error) in
+                    guard let self = self else { return }
+                    
+                    if let error = error {
+                        print("Error downloading image: \(error)")
+                        return
+                    }
+                    
+                    guard let data = data else {
+                        print("No image data received")
+                        return
+                    }
+                    
+                    // 다운로드된 데이터로부터 이미지 생성
+                    if let image = UIImage(data: data) {
+                        // 메인 스레드에서 UI 업데이트
+                        DispatchQueue.main.async {
+                            self.imageView.image = image
+                        }
+                    }
                 }
+                
+                task.resume()
             }
         }
     }
@@ -113,7 +131,19 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         wishProduct.title = currentProduct.title
         wishProduct.price = currentProduct.price
         
-        try? context.save()
+        do {
+            try context.save()
+            showAddToWishlistSuccessAlert() // 추가 성공 알림창 표시
+        } catch {
+            print("Failed to save wish product: \(error)")
+        }
+    }
+
+    // 위시 리스트에 추가되었다는 알림창 표시
+    private func showAddToWishlistSuccessAlert() {
+        let alert = UIAlertController(title: "추가 완료", message: "상품이 위시 리스트에 추가되었습니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: -View Life Cycle
