@@ -69,9 +69,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
-
+    
     // MARK: -UI Actions
-
+    
     // 상품 저장 버튼
     @IBAction func tappedSaveProductButton(_ sender: UIButton) {
         self.saveWishProduct()
@@ -138,7 +138,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             print("Failed to save wish product: \(error)")
         }
     }
-
+    
     // 위시 리스트에 추가되었다는 알림창 표시
     private func showAddToWishlistSuccessAlert() {
         let alert = UIAlertController(title: "추가 완료", message: "상품이 위시 리스트에 추가되었습니다.", preferredStyle: .alert)
