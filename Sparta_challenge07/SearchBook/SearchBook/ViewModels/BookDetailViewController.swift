@@ -1,8 +1,8 @@
 //
 //  BookDetailViewController.swift
-//  BookSearch
+//  SearchBook
 //
-//  Created by Jeong-bok Lee on 5/7/24.
+//  Created by Jeong-bok Lee on 5/9/24.
 //
 
 import UIKit
@@ -24,4 +24,5 @@ class BookDetailViewController: UIViewController {
         // Implement displaying book details
     }
 }
+
 

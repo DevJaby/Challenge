@@ -1,26 +1,27 @@
 //
 //  SceneDelegate.swift
-//  BookSearch
+//  SearchBook
 //
-//  Created by Jeong-bok Lee on 5/3/24.
+//  Created by Jeong-bok Lee on 5/9/24.
 //
 
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
- 
     var window: UIWindow?
 
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        
-        let window = UIWindow(windowScene: windowScene)
-        let tabBarController = TabBarController()
-        window.rootViewController = tabBarController
-        self.window = window
-        window.makeKeyAndVisible()
-    }
+      func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+          guard let windowScene = (scene as? UIWindowScene) else { return }
+          let window = UIWindow(windowScene: windowScene)
+          let tabBarController = TabBarController()
+          
+          window.rootViewController = tabBarController
+
+          self.window = window
+          window.makeKeyAndVisible()
+          tabBarController.selectedIndex = 0
+      }
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
@@ -52,3 +53,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
+
